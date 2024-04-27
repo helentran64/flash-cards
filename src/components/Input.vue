@@ -14,17 +14,35 @@
             </div>
         </div>
     </div>
+
+    <div class="listOfNotes">
+        <div v-for="note in notes">
+            <h3>Term: {{ note.term }}</h3>
+            <p> Definition: {{ note.def }}</p>
+        </div>
+    </div>
 </template>
 
 <script>
 export default{
+    emits: ['info'], // Initialize emits
+    data(){
+        return{
+            term: "",
+            def: "",
+            notes: [],
+        }
+    },
     methods:{
         // Once user submits, their info will be sent to Home.vue (parent) so it can be sent to FlashCard.vue for display
         submitInfo(){
-            let term = this.$refs.term.value;
-            let def = this.$refs.def.value;
-            this.$emit('info', term, def);
-        },
+            this.term = this.$refs.term.value;
+            this.def = this.$refs.def.value;
+            this.$emit('info', this.term, this.def);
+            // Push to the notes array to be displayed
+            this.notes.push({term: this.term, definition: this.def});
+            console.log(this.notes);
+        }
     }
 }
 </script>

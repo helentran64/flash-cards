@@ -8,11 +8,8 @@
         data(){
             return{
                 term: "",
-                def: "",
+                def: ""
             }
-        },
-        methods:{
-            
         }
     }
 </script>
