@@ -1,0 +1,33 @@
+<!-- Homepage -->
+
+<script>
+    import Card from '../components/FlashCard.vue'
+    import Input from '../components/Input.vue'
+    export default {
+        components: {Card, Input},
+        data(){
+            return{
+                term: "",
+                def: "",
+            }
+        },
+        methods:{
+            
+        }
+    }
+</script>
+
+<template>
+    <!-- Inject Card and Input components onto the Homepage -->
+    <!-- Input retrieved from Input.vue will be passed to FlashCard.vue -->
+    <Card v-bind:term="this.term" v-bind:def="this.def"/>
+    <Input @info="(term, def) =>{
+        this.term = term;
+        this.def = def;
+    }
+    "/>
+</template>
+
+<style scoped>
+    
+</style>
