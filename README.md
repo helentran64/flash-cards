@@ -1,2 +1,2 @@
 # flash-cards
-To help memorize for exams
+To help memorize for exams using active recall
