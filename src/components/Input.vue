@@ -42,7 +42,6 @@ export default{
             this.$emit('info', this.term, this.def);
             // Push to the notes array to be displayed
             this.notes.push({term: this.term, def: this.def});
-            console.log(this.notes);
         }
     }
 }

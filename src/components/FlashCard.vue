@@ -1,7 +1,7 @@
 <template>
     <div id="card">
-        <p id="term">term: {{ term }}</p>
-        <p id="definition">def: {{ def }}</p>
+        <p id="term">Term: {{ term }}</p>
+        <p id="definition">Definition: {{ def }}</p>
     </div>
 </template>
 
