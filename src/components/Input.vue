@@ -17,7 +17,7 @@
 
     <!-- Displays all the notes submitted -->
     <div class="listOfNotes">
-        <p id="cardsHeading">Cards in this set</p>
+        <p id="cardsHeading" v-if="addedFirstCard">Cards in this set ({{ getCardCount }})</p>
         <div class="note" v-for="note in notes">
             <p>Term: {{ note.term }}</p>
             <p> Definition: {{ note.def }}</p>
@@ -33,6 +33,13 @@ export default{
             term: "",
             def: "",
             notes: [],
+            addedFirstCard: false
+        }
+    },
+    computed: {
+        // Get the number of cards in the notes array
+        getCardCount(){
+            return this.notes.length
         }
     },
     methods:{
@@ -43,6 +50,8 @@ export default{
             this.$emit('info', this.term, this.def);
             // Push to the notes array to be displayed
             this.notes.push({term: this.term, def: this.def});
+            // Set addedFirstCard to true to make the corresponding text visible.
+            this.addedFirstCard = true;
         }
     }
 }
