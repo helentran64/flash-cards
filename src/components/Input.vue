@@ -17,7 +17,7 @@
 
     <!-- Displays all the notes submitted -->
     <div class="listOfNotes">
-        <div v-for="note in notes">
+        <div class="note" v-for="note in notes">
             <p>Term: {{ note.term }}</p>
             <p> Definition: {{ note.def }}</p>
         </div>
@@ -75,8 +75,14 @@ export default{
         margin-right: auto;
         margin-left: auto;
     }
-    .listOfNotes{
+    .note{
         background-color: rgb(48, 44, 75);
-        margin: 20px;
+        border-radius: 5px;
+        width: 500px;
+        margin-right: auto;
+        margin-left: auto;
+        padding: 20px;
+        margin-top: 20px;
+        margin-bottom: 20px;
     }
 </style>
