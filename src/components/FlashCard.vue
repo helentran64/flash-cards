@@ -25,4 +25,10 @@ export default{
         margin-right: auto;
         margin-left: auto;
     }
+    @media only screen and (max-width: 700px){
+        #card{
+            width: 200px;
+            height: 100px;
+        }
+    }
 </style>

@@ -2,7 +2,7 @@
 <template>
     <div class="inputContainer">
         <div>
-        <p class="add">Add card</p>
+        <p id="addHeading">Add card</p>
         </div>
         <div class="inputField">
             <div class="submitSection">
@@ -17,6 +17,7 @@
 
     <!-- Displays all the notes submitted -->
     <div class="listOfNotes">
+        <p id="cardsHeading">Cards in this set</p>
         <div class="note" v-for="note in notes">
             <p>Term: {{ note.term }}</p>
             <p> Definition: {{ note.def }}</p>
@@ -51,17 +52,21 @@ export default{
     p{
         color: white;
     }
-    .add{
+    #addHeading{
         font-size: 20px;
     }
     .inputContainer{
-        margin-right: 120px;
-        margin-left: 120px;
+        width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
     .inputField{
         background-color: rgb(48, 44, 75);
         padding: 20px;
         border-radius: 10px;
+        width: 560px;
+        margin-left: auto;
+        margin-right: auto;
     }
     label{
         padding: 5px;
@@ -75,13 +80,21 @@ export default{
         margin-right: auto;
         margin-left: auto;
     }
+    .listOfNotes{
+        width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #cardsHeading{
+        font-size: 20px;
+    }
     .note{
         background-color: rgb(48, 44, 75);
-        border-radius: 5px;
-        width: 500px;
+        border-radius: 10px;
+        width: 560px;
+        padding: 20px;
         margin-right: auto;
         margin-left: auto;
-        padding: 20px;
         margin-top: 20px;
         margin-bottom: 20px;
     }
