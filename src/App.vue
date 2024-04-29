@@ -18,5 +18,7 @@ import Logo from './components/Logo.vue'
 </template>
 
 <style scoped>
-
+  header{
+    border: 1px white;
+  }
 </style>
