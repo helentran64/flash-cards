@@ -33,7 +33,7 @@ export default{
             term: "",
             def: "",
             notes: [],
-            addedFirstCard: false
+            addedFirstCard: false,
         }
     },
     computed: {
@@ -48,10 +48,22 @@ export default{
             this.term = this.$refs.term.value;
             this.def = this.$refs.def.value;
             this.$emit('info', this.term, this.def);
-            // Push to the notes array to be displayed
-            this.notes.push({term: this.term, def: this.def});
+            // Push only unique terms to the notes array for display
+            let duplicate = this.hasDuplicates({term: this.term, def: this.def});
+            if (!duplicate){
+                this.notes.push({term: this.term, def: this.def});
+            }
             // Set addedFirstCard to true to make the corresponding text visible.
             this.addedFirstCard = true;
+        },
+        hasDuplicates(newNote){
+            let current = newNote.term;
+            for (let i = 0; i < this.notes.length; i++){
+                if (this.notes[i].term == current){
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
