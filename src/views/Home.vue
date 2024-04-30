@@ -8,7 +8,8 @@
         data(){
             return{
                 term: "",
-                def: ""
+                def: "",
+                addedFirstCard: false
             }
         }
     }
@@ -17,10 +18,11 @@
 <template>
     <!-- Inject Card and Input components onto the Homepage -->
     <!-- Input retrieved from Input.vue will be passed to FlashCard.vue -->
-    <Card v-bind:term="this.term" v-bind:def="this.def"/>
-    <Input @info="(term, def) =>{
+    <Card v-bind:term="this.term" v-bind:def="this.def" v-bind:addedFirstCard="this.addedFirstCard"/>
+    <Input @info="(term, def, addedFirstCard) =>{
         this.term = term;
         this.def = def;
+        this.addedFirstCard = addedFirstCard;
     }
     "/>
 </template>

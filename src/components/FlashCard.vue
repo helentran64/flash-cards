@@ -1,33 +1,26 @@
+<!-- Component to display the contents on the current flash card -->
 <template>
     <div id="card">
-        <p id="term">Term: {{ term }}</p>
-        <p id="definition">Definition: {{ def }}</p>
-    </div>
-    <div id="controls">
-        <input type="button" value="previous">
-        <input type="button" value="next">
-    </div>
-    <div id="tracker">
-        <!-- Tracks which card you are currently on -->
-        <p>{{ currentCardNumber }} / {{ totalCards }}</p>
+        <div v-if="addedFirstCard">
+            <p id="term">Term: {{ term }}</p>
+            <p id="definition">Definition: {{ def }}</p>
+        </div>
+        <div v-else>
+            <p>Please add a term and definition to begin.</p>
+        </div>
     </div>
 </template>
 
 <script>
 export default{
-    props: ['term', 'def', 'sent'],
-    data(){
-        return{
-            currentCardNumber: 0,
-            totalCards: 0,
-        }
-    }
+    props: ['term', 'def', 'addedFirstCard']
 }
 </script>
 
 <style scoped>
     p{
         color: white;
+        text-align: center;
     }
     #card{
         background-color: rgb(48, 44, 75);
@@ -38,23 +31,6 @@ export default{
         margin-top: 50px;
         margin-right: auto;
         margin-left: auto;
-    }
-    #controls{
-        max-width: fit-content;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 10px;
-
-    }
-    input{
-        padding: 5px;
-        margin: 2px;
-    }
-    #tracker{
-        max-width: fit-content;
-        margin-left: auto;
-        margin-right: auto;
-        padding: 10px;
     }
     @media only screen and (max-width: 700px){
         #card{

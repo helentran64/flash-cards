@@ -1,6 +1,14 @@
 <!-- Component to enter term and definition of a flash card -->
 <template>
     <div class="inputContainer">
+        <div id="controls">
+            <input type="button" value="previous">
+            <input type="button" value="next">
+        </div>
+        <div id="tracker">
+            <!-- Tracks which card you are currently on -->
+            <p>{{ getCurrentCardNumber }} / {{ getCardCount }}</p>
+        </div>
         <div>
         <p id="addHeading">Add card</p>
         </div>
@@ -18,6 +26,7 @@
     <!-- Displays all the notes submitted -->
     <div class="listOfNotes">
         <p id="cardsHeading" v-if="addedFirstCard">Cards in this set ({{ getCardCount }})</p>
+        <p></p>
         <div class="note" v-for="note in notes">
             <p>Term: {{ note.term }}</p>
             <p> Definition: {{ note.def }}</p>
@@ -30,6 +39,7 @@ export default{
     emits: ['info'], // Initialize emits
     data(){
         return{
+            currentCardNumber: 0,
             term: "",
             def: "",
             notes: [],
@@ -40,6 +50,15 @@ export default{
         // Get the number of cards in the notes array
         getCardCount(){
             return this.notes.length
+        },
+        getCurrentCardNumber(){
+            if (this.notes.length == 0){
+                return 0;
+            }
+            else{
+                this.currentCardNumber += 1;
+                return this.currentCardNumber;
+            }
         }
     },
     methods:{
@@ -47,7 +66,6 @@ export default{
         submitInfo(){
             this.term = this.$refs.term.value;
             this.def = this.$refs.def.value;
-            this.$emit('info', this.term, this.def);
             // Push only unique terms to the notes array for display
             let duplicate = this.hasDuplicates({term: this.term, def: this.def});
             if (!duplicate){
@@ -55,6 +73,8 @@ export default{
             }
             // Set addedFirstCard to true to make the corresponding text visible.
             this.addedFirstCard = true;
+            // Send information to Home.vue
+            this.$emit('info', this.term, this.def, this.addedFirstCard);
         },
         hasDuplicates(newNote){
             let current = newNote.term;
@@ -72,6 +92,23 @@ export default{
 <style scoped>
     p{
         color: white;
+    }
+    #controls{
+        max-width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px;
+
+    }
+    input{
+        padding: 5px;
+        margin: 2px;
+    }
+    #tracker{
+        max-width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 10px;
     }
     #addHeading{
         font-size: 20px;
