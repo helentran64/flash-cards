@@ -1,11 +1,11 @@
 <!-- Component to display the contents on the current flash card -->
 <template>
-    <div id="card">
+    <div id="card" v-on:click="flipCard">
         <!-- Only displays cards if at least one card was initialized -->
         <div v-if="addedFirstCard">
             <!-- Display card at the current index -->
-            <p id="term">Term: {{ notes[index].term }}</p> 
-            <p id="definition">Definition: {{ notes[index].def }}</p>
+            <p id="term" v-if="displayTerm">Term: {{ notes[index].term }}</p> 
+            <p id="definition" v-if="displayDef">Definition: {{ notes[index].def }}</p>
         </div>
         <div v-else>
             <p>Please add a term and definition to begin.</p>
@@ -15,7 +15,19 @@
 
 <script>
 export default{
-    props: ['term', 'def', 'addedFirstCard', 'notes', 'index']
+    props: ['term', 'def', 'addedFirstCard', 'notes', 'index'],
+    data(){
+        return{
+            displayTerm: true,
+            displayDef: false
+        }
+    },
+    methods:{
+        flipCard(){
+            this.displayTerm = !this.displayTerm;
+            this.displayDef = !this.displayDef;
+        }
+    }
 }
 </script>
 
