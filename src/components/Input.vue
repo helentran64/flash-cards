@@ -7,7 +7,7 @@
         </div>
         <div id="tracker">
             <!-- Tracks which card you are currently on -->
-            <p>{{ getCurrentCardNumber }} / {{ getCardCount }}</p>
+            <p>{{ getCurrentCardNumberPage }} / {{ getCardCount }}</p>
         </div>
         <div>
         <p id="addHeading">Add card</p>
@@ -39,7 +39,8 @@ export default{
     emits: ['info'], // Initialize emits
     data(){
         return{
-            currentCardNumber: 0,
+            currentCardNumberPage: 0,
+            index: 0,
             term: "",
             def: "",
             notes: [],
@@ -51,13 +52,16 @@ export default{
         getCardCount(){
             return this.notes.length
         },
-        getCurrentCardNumber(){
+        getCurrentCardNumberPage(){
             if (this.notes.length == 0){
                 return 0;
             }
+            else if(this.notes.length == 1){
+                this.currentCardNumberPage += 1;
+                return this.currentCardNumberPage;
+            }
             else{
-                this.currentCardNumber += 1;
-                return this.currentCardNumber;
+                return this.currentCardNumberPage;
             }
         }
     },
@@ -74,8 +78,9 @@ export default{
             // Set addedFirstCard to true to make the corresponding text visible.
             this.addedFirstCard = true;
             // Send information to Home.vue
-            this.$emit('info', this.term, this.def, this.addedFirstCard);
+            this.$emit('info', this.term, this.def, this.addedFirstCard, this.notes, this.index);
         },
+        // Checks if the notes array have duplicates
         hasDuplicates(newNote){
             let current = newNote.term;
             for (let i = 0; i < this.notes.length; i++){

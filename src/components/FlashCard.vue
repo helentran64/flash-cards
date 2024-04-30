@@ -2,8 +2,8 @@
 <template>
     <div id="card">
         <div v-if="addedFirstCard">
-            <p id="term">Term: {{ term }}</p>
-            <p id="definition">Definition: {{ def }}</p>
+            <p id="term">Term: {{ notes[index].term }}</p> 
+            <p id="definition">Definition: {{ notes[index].def }}</p>
         </div>
         <div v-else>
             <p>Please add a term and definition to begin.</p>
@@ -13,7 +13,7 @@
 
 <script>
 export default{
-    props: ['term', 'def', 'addedFirstCard']
+    props: ['term', 'def', 'addedFirstCard', 'notes', 'index']
 }
 </script>
 
