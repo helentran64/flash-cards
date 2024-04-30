@@ -21,14 +21,18 @@
     <!-- Inject Card and Input components onto the Homepage -->
     <!-- Input retrieved from Input.vue will be passed to FlashCard.vue -->
     <Card v-bind:term="this.term" v-bind:def="this.def" v-bind:addedFirstCard="this.addedFirstCard" v-bind:notes="this.notes" v-bind:index="this.index"/>
-    <Input @info="(term, def, addedFirstCard, notes, index) =>{
+    <Input @info="(term, def, addedFirstCard, notes) =>{
         this.term = term;
         this.def = def;
         this.addedFirstCard = addedFirstCard;
         this.notes = notes;
+    }"
+    @back="(index) => {
         this.index = index;
-    }
-    "/>
+    }"
+    @forward="(index) => {
+        this.index = index;
+    }"/>
 </template>
 
 <style scoped>

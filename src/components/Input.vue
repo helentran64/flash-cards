@@ -2,8 +2,8 @@
 <template>
     <div class="inputContainer">
         <div id="controls">
-            <input type="button" value="previous">
-            <input type="button" value="next">
+            <input type="button" value="previous" v-on:click="goBack">
+            <input type="button" value="next" v-on:click="goForward">
         </div>
         <div id="tracker">
             <!-- Tracks which card you are currently on -->
@@ -36,7 +36,7 @@
 
 <script>
 export default{
-    emits: ['info'], // Initialize emits
+    emits: ['info', 'back', 'forward'], // Initialize emits
     data(){
         return{
             currentCardNumberPage: 0,
@@ -78,7 +78,7 @@ export default{
             // Set addedFirstCard to true to make the corresponding text visible.
             this.addedFirstCard = true;
             // Send information to Home.vue
-            this.$emit('info', this.term, this.def, this.addedFirstCard, this.notes, this.index);
+            this.$emit('info', this.term, this.def, this.addedFirstCard, this.notes);
         },
         // Checks if the notes array have duplicates
         hasDuplicates(newNote){
@@ -89,6 +89,18 @@ export default{
                 }
             }
             return false;
+        },
+        goBack(){
+            if (this.index > 0){
+                this.index -= 1;
+                this.$emit('back', this.index);
+            }
+        },
+        goForward(){
+            if (this.index < this.notes.length-1){
+                this.index += 1;
+                this.$emit('forward', this.index);
+            }
         }
     }
 }
