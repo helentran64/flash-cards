@@ -1,7 +1,9 @@
 <!-- Component to display the contents on the current flash card -->
 <template>
     <div id="card">
+        <!-- Only displays cards if at least one card was initialized -->
         <div v-if="addedFirstCard">
+            <!-- Display card at the current index -->
             <p id="term">Term: {{ notes[index].term }}</p> 
             <p id="definition">Definition: {{ notes[index].def }}</p>
         </div>

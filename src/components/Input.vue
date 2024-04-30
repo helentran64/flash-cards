@@ -1,13 +1,13 @@
 <!-- Component to enter term and definition of a flash card -->
 <template>
     <div class="inputContainer">
-        <div id="controls">
+        <div id="controls" v-if="addedFirstCard">
             <input type="button" value="previous" v-on:click="goBack">
             <input type="button" value="next" v-on:click="goForward">
         </div>
-        <div id="tracker">
+        <div id="tracker" v-if="addedFirstCard">
             <!-- Tracks which card you are currently on -->
-            <p>{{ getCurrentCardNumberPage }} / {{ getCardCount }}</p>
+            <p>{{ index+1 }} / {{ getCardCount }}</p>
         </div>
         <div>
         <p id="addHeading">Add card</p>
@@ -39,30 +39,17 @@ export default{
     emits: ['info', 'back', 'forward'], // Initialize emits
     data(){
         return{
-            currentCardNumberPage: 0,
             index: 0,
             term: "",
             def: "",
             notes: [],
-            addedFirstCard: false,
+            addedFirstCard: false, // Updates to true if first card is added to notes array
         }
     },
     computed: {
         // Get the number of cards in the notes array
         getCardCount(){
             return this.notes.length
-        },
-        getCurrentCardNumberPage(){
-            if (this.notes.length == 0){
-                return 0;
-            }
-            else if(this.notes.length == 1){
-                this.currentCardNumberPage += 1;
-                return this.currentCardNumberPage;
-            }
-            else{
-                return this.currentCardNumberPage;
-            }
         }
     },
     methods:{
@@ -93,12 +80,14 @@ export default{
         goBack(){
             if (this.index > 0){
                 this.index -= 1;
+                // Send information to Home.vue
                 this.$emit('back', this.index);
             }
         },
         goForward(){
             if (this.index < this.notes.length-1){
                 this.index += 1;
+                // Send information to Home.vue
                 this.$emit('forward', this.index);
             }
         }
