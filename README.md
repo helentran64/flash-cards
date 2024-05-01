@@ -6,8 +6,8 @@
 - Download the repository onto your local machine
 - Open terminal and go to the project directory
 - Enter: `npm intall`
-- Then Enter: `npm run dev`
-- Go to the link that node provided to run the app
+- Then enter: `npm run dev`
+- Go to the link provided to run the app
 
 # Setup Database
 - Open terminal and go to the project directory. Enter: `npm install json-server`
