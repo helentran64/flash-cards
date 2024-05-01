@@ -2,7 +2,7 @@
 <template>
     <div id="card" v-on:click="flipCard">
         <!-- Only displays cards if at least one card was initialized -->
-        <div v-if="addedFirstCard">
+        <div v-if="addedFirstCard && flashCardsLength"> 
             <!-- Display card at the current index -->
             <p id="term" v-if="displayTerm">Term: {{ flashCards[index].term }}</p> 
             <p id="definition" v-if="displayDef">Definition: {{ flashCards[index].definition }}</p>
@@ -15,7 +15,7 @@
 
 <script>
 export default{
-    props: ['term', 'def', 'addedFirstCard', 'flashCards', 'index'],
+    props: ['term', 'def', 'addedFirstCard', 'flashCards', 'index', 'flashCardsLength'],
     data(){
         return{
             displayTerm: true,

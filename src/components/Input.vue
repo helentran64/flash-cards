@@ -27,16 +27,17 @@
     <!-- Displays all the notes submitted -->
     <div class="listOfNotes" v-if="addedFirstCard">
         <p id="cardsHeading">Cards in this set ({{ getCardCount }})</p>
-        <div class="note" v-for="note in flashCards">
+        <div class="note" v-for="(note, index) in flashCards">
             <p>Term: {{ note.term }}</p>
             <p>Definition: {{ note.definition }}</p>
+            <input type="button" value="Delete Card" v-on:click="deleteCard(index)">
         </div>
     </div>
 </template>
 
 <script>
 export default{
-    emits: ['info', 'back', 'forward'], // Initialize emits
+    emits: ['info', 'back', 'forward', 'emptyFlashCards'], // Initialize emits
     data(){
         return{
             index: 0,
@@ -87,6 +88,9 @@ export default{
                     console.error("Error " + err);
                 });
             }
+            // Clear the input fields after submission
+            this.$refs.term.value = "";
+            this.$refs.def.value = "";
         },
         // Returns true if the flashCards array has a duplicate if the newNote
         hasDuplicates(newNote){
@@ -137,6 +141,30 @@ export default{
             }
             catch(err){
                 console.error('Error fetching data ' + err);
+            }
+        },
+        // Delete entry from JSON database
+        async deleteCard(index) {
+            try {
+                // Get current flash card id
+                let currentId = this.flashCards[index].id;
+                // Delete the JSON entry with the specified id
+                await fetch('http://localhost:3000/flashCards/' + currentId, {
+                    method: 'DELETE', 
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.flashCards)
+                });
+                // Remove the flash card at the specified index
+                this.flashCards.splice(index, 1);
+
+                // If flashCards array is empty, send message to Home.vue, then to FlashCard.vue
+                if (this.getCardCount == 0){
+                    this.$emit('emptyFlashCards', this.getCardCount);
+                }
+            } catch (err) {
+                console.error(err.message);
             }
         }
     }
