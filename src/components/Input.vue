@@ -1,12 +1,13 @@
 <!-- Component to enter term and definition of a flash card -->
 <template>
     <div class="inputContainer">
+        <!-- Buttons to go back and forth between flash cards -->
         <div id="controls" v-if="addedFirstCard">
             <input type="button" value="previous" v-on:click="goBack">
             <input type="button" value="next" v-on:click="goForward">
         </div>
+        <!-- Tracks which card you are currently on -->
         <div id="tracker" v-if="addedFirstCard">
-            <!-- Tracks which card you are currently on -->
             <p>{{ index+1 }} / {{ getCardCount }}</p>
         </div>
         <div>
@@ -24,12 +25,11 @@
     </div>
 
     <!-- Displays all the notes submitted -->
-    <div class="listOfNotes">
-        <p id="cardsHeading" v-if="addedFirstCard">Cards in this set ({{ getCardCount }})</p>
-        <p></p>
-        <div class="note" v-for="note in notes">
+    <div class="listOfNotes" v-if="addedFirstCard">
+        <p id="cardsHeading">Cards in this set ({{ getCardCount }})</p>
+        <div class="note" v-for="note in flashCards">
             <p>Term: {{ note.term }}</p>
-            <p> Definition: {{ note.def }}</p>
+            <p>Definition: {{ note.definition }}</p>
         </div>
     </div>
 </template>
@@ -42,36 +42,57 @@ export default{
             index: 0,
             term: "",
             def: "",
-            notes: [],
-            addedFirstCard: false, // Updates to true if first card is added to notes array
+            flashCards: []
         }
     },
     computed: {
-        // Get the number of cards in the notes array
+        // Get the number of cards in the flashCards array
         getCardCount(){
-            return this.notes.length
+            return this.flashCards.length
+        },
+        // Checks if there is at least one card in the flashCards array
+        addedFirstCard(){
+            if (this.getCardCount > 0){
+                return true;
+            }
+            else{
+                return false;
+            }
         }
+    },
+    mounted(){
+        // When the page is loaded, the flash cards saved are displayed 
+        fetch('http://localhost:3000/flashCards')
+        .then(res => res.json())
+        .then(data => {
+            this.flashCards = data;
+            this.getData();
+            this.$emit('info', this.term, this.def, this.addedFirstCard, this.flashCards);
+        })
+        .catch(err => console.log(err.message));
     },
     methods:{
         // Once user submits, their info will be sent to Home.vue (parent) so it can be sent to FlashCard.vue for display
         submitInfo(){
             this.term = this.$refs.term.value;
             this.def = this.$refs.def.value;
-            // Push only unique terms to the notes array for display
+            // Post only unique terms to the database for display
             let duplicate = this.hasDuplicates({term: this.term, def: this.def});
             if (!duplicate){
-                this.notes.push({term: this.term, def: this.def});
+                this.postData({"term": this.term, "definition": this.def})
+                .then(()=>{
+                    this.$emit('info', this.term, this.def, this.addedFirstCard, this.flashCards);
+                })
+                .catch(err => {
+                    console.error("Error " + err);
+                });
             }
-            // Set addedFirstCard to true to make the corresponding text visible.
-            this.addedFirstCard = true;
-            // Send information to Home.vue
-            this.$emit('info', this.term, this.def, this.addedFirstCard, this.notes);
         },
-        // Checks if the notes array have duplicates
+        // Returns true if the flashCards array has a duplicate if the newNote
         hasDuplicates(newNote){
             let current = newNote.term;
-            for (let i = 0; i < this.notes.length; i++){
-                if (this.notes[i].term == current){
+            for (let i = 0; i < this.flashCards.length; i++){
+                if (this.flashCards[i].term == current){
                     return true;
                 }
             }
@@ -85,10 +106,37 @@ export default{
             }
         },
         goForward(){
-            if (this.index < this.notes.length-1){
+            if (this.index < this.getCardCount-1){
                 this.index += 1;
                 // Send information to Home.vue
                 this.$emit('forward', this.index);
+            }
+        },
+        // Post data to the database
+        async postData(data){
+            try{
+                const response = await fetch('http://localhost:3000/flashCards',{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                await this.getData();
+            }
+            catch(err){
+                console.error("Error posting data");
+            }
+        },
+        // Fetch data from the database and store the output to flashCards array
+        async getData(){
+            try{
+                const response = await fetch('http://localhost:3000/flashCards');
+                const data = await response.json();
+                this.flashCards = data;
+            }
+            catch(err){
+                console.error('Error fetching data ' + err);
             }
         }
     }
